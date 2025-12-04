@@ -69,7 +69,6 @@ final class DittoManager {
             setenv("DITTO_WEBSOCKET_ENDPOINT", Env.DITTO_WEBSOCKET_URL, 1)
 
             // Initialize Ditto
-            // For custom cloud instance at i83inp.cloud.dittolive.app
             // https://docs.ditto.live/sdk/latest/install-guides/swift#integrating-and-initializing-sync
             ditto = Ditto(
                 identity:
