@@ -65,14 +65,19 @@ final class DittoManager {
         DittoLogger.minimumLogLevel = .debug
 
         do {
+            // Set custom WebSocket endpoint for cloud sync
+            setenv("DITTO_WEBSOCKET_ENDPOINT", Env.DITTO_WEBSOCKET_URL, 1)
+
             // Initialize Ditto
+            // For custom cloud instance at i83inp.cloud.dittolive.app
             // https://docs.ditto.live/sdk/latest/install-guides/swift#integrating-and-initializing-sync
             ditto = Ditto(
                 identity:
                     .onlinePlayground(
                         appID: Env.DITTO_APP_ID,
                         token: Env.DITTO_PLAYGROUND_TOKEN,
-                        enableDittoCloudSync: false
+                        enableDittoCloudSync: true,
+                        customAuthURL: URL(string: Env.DITTO_AUTH_URL)
                     )
             )
 
