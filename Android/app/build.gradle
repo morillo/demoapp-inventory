@@ -18,25 +18,25 @@ android {
     buildTypes {
 
         debug {
-            def credsFile = rootProject.file("../.env")
+            def credsFile = rootProject.file("secure/debug_creds.properties")
             def prop = new Properties()
             prop.load(new FileInputStream(credsFile))
-            buildConfigField('String', 'DITTO_APP_ID', "\"${prop['DITTO_APP_ID']}\"")
-            buildConfigField('String', 'DITTO_PLAYGROUND_TOKEN', "\"${prop['DITTO_PLAYGROUND_TOKEN']}\"")
-            buildConfigField('String', 'DITTO_AUTH_URL', "\"${prop['DITTO_AUTH_URL']}\"")
-            buildConfigField('String', 'DITTO_WEBSOCKET_URL', "\"${prop['DITTO_WEBSOCKET_URL']}\"")
+            buildConfigField('String', 'DITTO_APP_ID', prop['APP_ID'])
+            buildConfigField('String', 'DITTO_PLAYGROUND_TOKEN', prop['ONLINE_AUTH_TOKEN'])
+            buildConfigField('String', 'DITTO_AUTH_URL', prop['DITTO_AUTH_URL'])
+            buildConfigField('String', 'DITTO_WEBSOCKET_URL', prop['DITTO_WEBSOCKET_URL'])
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            def credsFile = rootProject.file("../.env")
+            def credsFile = rootProject.file("secure/release_creds.properties")
             def prop = new Properties()
             try {
                 prop.load(new FileInputStream(credsFile))
-                buildConfigField('String', 'DITTO_APP_ID', "\"${prop['DITTO_APP_ID']}\"")
-                buildConfigField('String', 'DITTO_PLAYGROUND_TOKEN', "\"${prop['DITTO_PLAYGROUND_TOKEN']}\"")
-                buildConfigField('String', 'DITTO_AUTH_URL', "\"${prop['DITTO_AUTH_URL']}\"")
-                buildConfigField('String', 'DITTO_WEBSOCKET_URL', "\"${prop['DITTO_WEBSOCKET_URL']}\"")
+                buildConfigField('String', 'DITTO_APP_ID', prop['APP_ID'])
+                buildConfigField('String', 'DITTO_PLAYGROUND_TOKEN', prop['ONLINE_AUTH_TOKEN'])
+                buildConfigField('String', 'DITTO_AUTH_URL', prop['DITTO_AUTH_URL'])
+                buildConfigField('String', 'DITTO_WEBSOCKET_URL', prop['DITTO_WEBSOCKET_URL'])
             } catch (FileNotFoundException e) {
                 logger.warn("Warning: " + e.getMessage())
             }
