@@ -25,21 +25,28 @@ object DittoManager {
     // Those values should be pasted in 'gradle.properties'. See the notion page for more details.
     private const val APP_ID = BuildConfig.DITTO_APP_ID
     private const val ONLINE_AUTH_TOKEN = BuildConfig.DITTO_PLAYGROUND_TOKEN
+    private const val AUTH_URL = BuildConfig.DITTO_AUTH_URL
+    private const val WEBSOCKET_URL = BuildConfig.DITTO_WEBSOCKET_URL
 
     /* Internal functions and properties */
     internal suspend fun startDitto(context: Context) {
         DittoLogger.minimumLogLevel = DittoLogLevel.DEBUG
 
         val dependencies = DefaultAndroidDittoDependencies(context)
-        ditto = Ditto(dependencies, DittoIdentity.OnlinePlayground(dependencies, APP_ID, ONLINE_AUTH_TOKEN, false))
+        ditto = Ditto(dependencies, DittoIdentity.OnlinePlayground(dependencies, APP_ID, ONLINE_AUTH_TOKEN, false, AUTH_URL))
 
         try {
             ditto?.let {
+                // Configure custom WebSocket endpoint for cloud sync
+                it.updateTransportConfig { transportConfig ->
+                    transportConfig.connect.websocketUrls.add(WEBSOCKET_URL)
+                }
+
                 // Disable sync with V3 Ditto
                 it.disableSyncWithV3()
 
                 // disable strict mode - allows for DQL with counters and objects as CRDT maps, must be called before startSync
-                // https://docs.ditto.live/dql/strict-mode 
+                // https://docs.ditto.live/dql/strict-mode
                 it.store.execute("ALTER SYSTEM SET DQL_STRICT_MODE = false")
 
                 // start sync
