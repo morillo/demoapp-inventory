@@ -72,9 +72,15 @@ final class DittoManager {
                     .onlinePlayground(
                         appID: Env.DITTO_APP_ID,
                         token: Env.DITTO_PLAYGROUND_TOKEN,
-                        enableDittoCloudSync: false
+                        enableDittoCloudSync: false,
+                        customAuthURL: URL(string: Env.DITTO_AUTH_URL)
                     )
             )
+
+            // Configure custom WebSocket endpoint for cloud sync
+            ditto.updateTransportConfig { transportConfig in
+                transportConfig.connect.webSocketURLs.insert(Env.DITTO_WEBSOCKET_URL)
+            }
 
             // Disable sync with V3 Ditto
             try ditto.disableSyncWithV3()
